@@ -1,4 +1,6 @@
-import app from "./app";
+import app from './app';
+import './libs/custom-array';
+import './libs/linked-list';
 
 const PORT = process.env.PORT || 4000;
 
