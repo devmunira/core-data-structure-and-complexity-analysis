@@ -23,7 +23,7 @@ class LinkedNode implements INode<LinkedNode, string> {
   }
 }
 
-class HashNode implements INode<HashNode, IHashNode> {
+export class HashNode implements INode<HashNode, IHashNode> {
   private key: string = '';
   private value: number | boolean = true;
   private next: HashNode | null = null;
@@ -65,6 +65,8 @@ export class LinkedList<T extends INode<T, D>, D extends string | IHashNode> {
     this.validator = validator;
   }
 
+  private checkType(type: T) {}
+
   // At last index add new element // Time: O(1) | Space: O(1)
   append(data: D) {
     if (!this.validator(data)) {
@@ -88,6 +90,27 @@ export class LinkedList<T extends INode<T, D>, D extends string | IHashNode> {
     return;
   }
 
+  find(key: string) {
+    // Time Complexity
+    if (this.length == 0) return null;
+    let current = this.head;
+    while (current) {
+      const data = current.getData();
+      if (isIHashNode(data) && data.key === key) {
+        return current;
+      } else if (
+        !isIHashNode(data) &&
+        typeof data === 'string' &&
+        data === key
+      ) {
+        return current;
+      } else {
+        current = current.getNext();
+      }
+    }
+    return null;
+  }
+
   toArray(): D[] {
     if (!this.head) return [];
 
@@ -98,8 +121,21 @@ export class LinkedList<T extends INode<T, D>, D extends string | IHashNode> {
       nodes.push(current.getData() as D);
       current = current.getNext();
     }
-
     return nodes;
+  }
+
+  *entries() {
+    let current = this.head;
+    while (current) {
+      const data = current.getData();
+      if (isIHashNode(data)) {
+        yield [data.key, data.value];
+      } else if (!isIHashNode(data) && typeof data === 'string') {
+        yield [data, true];
+      }
+
+      current = current.getNext();
+    }
   }
 }
 
