@@ -1,7 +1,7 @@
 import { isIHashNode } from '../utils/linked-list';
 import { IHashNode, INode } from './interfaces/linked-list-interface';
 
-class LinkedNode implements INode<LinkedNode, string> {
+export class LinkedNode implements INode<LinkedNode, string> {
   private node: string = '';
   private next: LinkedNode | null = null;
 
@@ -81,13 +81,13 @@ export class LinkedList<T extends INode<T, D>, D extends string | IHashNode> {
       this.head = newNode; // Time: O(1) | Space: O(0)
       this.tail = newNode; // Time: O(1) | Space: O(0)
       this.length++; // Time: O(1) | Space: O(0)
-      return;
+      return this;
     }
 
     this.tail!.setNext(newNode); // Time: O(1) | Space: O(0)
     this.tail = newNode; // Time: O(1) | Space: O(0)
     this.length++; // Time: O(1) | Space: O(0)
-    return;
+    return this;
   }
 
   find(key: string) {

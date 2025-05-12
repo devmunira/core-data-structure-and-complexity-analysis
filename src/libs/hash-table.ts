@@ -119,6 +119,28 @@ export class HashTable {
     }
     return all;
   }
+
+  clone() {
+    // Time O(m+n) = O(n)
+    const newHashTable = new HashTable();
+    if (this.length === 0) return newHashTable;
+
+    this.table.forEach((bucket, index) => {
+      // Time: O(n)
+      const newList = new LinkedList<HashNode, IHashNode>(
+        new HashNode(),
+        (data): data is IHashNode => isIHashNode(data),
+      );
+
+      if (bucket) {
+        for (const [key, value] of bucket.entries()) {
+          // Time O(m)
+          newList.append({ key, value } as IHashNode);
+        }
+      }
+      newHashTable.table[index] = newList;
+    });
+  }
 }
 
 const hasTable = new HashTable();

@@ -222,5 +222,109 @@ Analyze the time and space complexity for each of the following algorithms. For 
     - we can check set size then traverse through smaller size set and check has function in large size set.
 
 - Convert an array into a linked list.
+
+  ```
+  // convert array to linked list // Time: O(n) | Space: O(0)
+  toLinkedList() {
+    if (this.array.length <= 0) throw new Error('Array is empty!');
+    this.array.forEach((item) => { // time O(n)
+      this.linkedList.append(item as string); // time O(1)
+    });
+
+    return this.linkedList;
+  }
+
+  // At last index add new element to linked list // Time: O(1) | Space: O(1)
+  append(data: D) {
+    if (!this.validator(data)) {
+      throw new Error('Invalid data type');
+    }
+
+    let newNode = Object.create(Object.getPrototypeOf(this.node)); // Time: O(1) | Space: O(1)
+    newNode = newNode.setNode(data);
+
+    if (!this.head) {
+      // Time: O(1) | Space: O(0)
+      this.head = newNode; // Time: O(1) | Space: O(0)
+      this.tail = newNode; // Time: O(1) | Space: O(0)
+      this.length++; // Time: O(1) | Space: O(0)
+      return this;
+    }
+
+    this.tail!.setNext(newNode); // Time: O(1) | Space: O(0)
+    this.tail = newNode; // Time: O(1) | Space: O(0)
+    this.length++; // Time: O(1) | Space: O(0)
+    return this;
+  }
+  ```
+
+  - **Provide input-output mapping:**
+  - **Input:**
+    - For functional programming: Provide array that need to be convert as parameters.
+    - For class-based programming: Invoke the method it will automatically check of this array instance.
+  - **Output:**
+    - return a linked list which contains all array element.
+  - **Give step-by-step cost breakdown:**
+    - First need to iterate through all array element by **O(n)** time then append then into linked list by **O(1)**.
+    - The operation takes **O(n)** time.
+    - Memory overhead is minimal, with **O(1)** space complexity.
+  - **Determine final asymptotic complexities (time and space):**
+    - **Time Complexity:** O(n)
+    - **Space Complexity:** O(1)
+  - **Suggest optimizations, if any:**
+    - we can take decision earlier which data structure we use to avoid conversion.
+
 - Clone a hash table with chaining.
+
+```
+  clone() {
+    // Time O(m+n) = O(n) and Space O(n)
+    const newHashTable = new HashTable();
+    if (this.length === 0) return newHashTable;
+
+    this.table.forEach((bucket, index) => {
+      // Time: O(n)
+      const newList = new LinkedList<HashNode, IHashNode>(
+        new HashNode(),
+        (data): data is IHashNode => isIHashNode(data),
+      );
+
+      if (bucket) {
+        for (const [key, value] of bucket.entries()) {
+          // Time O(m)
+          newList.append({ key, value } as IHashNode);
+        }
+      }
+      newHashTable.table[index] = newList;
+    });
+  }
+
+```
+
+- **Provide input-output mapping:**
+- **Input:**
+  - For functional programming: Provide hash table that need to be clone as parameters.
+  - For class-based programming: Invoke the method it will automatically check of this hash table instance.
+- **Output:**
+  - return a new hash table.
+- **Give step-by-step cost breakdown:**
+  - First need to iterate through all table element by **O(n)** time then append then into linked list by **O(1)**.
+  - The operation takes **O(n)** time.
+  - Memory overhead is linear, with **O(n)** space complexity.
+- **Determine final asymptotic complexities (time and space):**
+
+  - **Time Complexity:** O(n)
+  - **Space Complexity:** O(n)
+
 - Compare array vs. hash set lookup performance.
+  Array Vs hash set lookup performance.
+  Here **m** refers to linked list size
+
+  | Operation       | Description                                                      | Array | Hash Set    |
+  | --------------- | ---------------------------------------------------------------- | ----- | ----------- |
+  | Access          | Get an element by its index or value: `arr[i] or set.has(value)` | O(1)  | O(1) / O(m) |
+  | Update          | Replace an element at a specific index                           | O(1)  | O(1) / O(m) |
+  | Insert (End)    | Add element at the end: `arr.push(val) or set.set(val)`          | O(1)  | O(1)        |
+  | Insert (Start)  | Add element at the beginning: `arr.unshift(val) or set.get(val)` | O(n)  | O(1)        |
+  | Delete (End)    | Remove last element: `arr.pop() or set.remove()`                 | O(1)  | O(1) / O(m) |
+  | Find (by value) | `arr.indexOf(val)` or `set.get(val)`                             | O(n)  | O(1)        |
